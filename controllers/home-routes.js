@@ -1,76 +1,88 @@
 const router = require('express').Router();
-const { Gallery, Painting } = require('../models');
+const { Post, Comment } = require('../models');
 // Import the custom middleware
 const withAuth = require('../utils/auth');
 
-// GET all galleries for homepage
 router.get('/', async (req, res) => {
-  try {
-    const dbGalleryData = await Gallery.findAll({
-      include: [
-        {
-          model: Painting,
-          attributes: ['filename', 'description'],
-        },
-      ],
-    });
+  Post.findAll({
+    include: [Comment]
+  }).then(data => {
+    console.log(data)
+    const hbsObj = {
+      postArr: data
+    }
+    res.render('home', hbsObj);
+  })
+})
 
-    const galleries = dbGalleryData.map((gallery) =>
-      gallery.get({ plain: true })
-    );
+// GET all galleries for homepage
+// router.get('/', async (req, res) => {
+//   try {
+//     const dbGalleryData = await Gallery.findAll({
+//       include: [
+//         {
+//           model: Painting,
+//           attributes: ['filename', 'description'],
+//         },
+//       ],
+//     });
 
-    res.render('homepage', {
-      galleries,
-      loggedIn: req.session.loggedIn,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+//     const galleries = dbGalleryData.map((gallery) =>
+//       gallery.get({ plain: true })
+//     );
 
-// GET one gallery
-// Use the custom middleware before allowing the user to access the gallery
-router.get('/gallery/:id', withAuth, async (req, res) => {
-  try {
-    const dbGalleryData = await Gallery.findByPk(req.params.id, {
-      include: [
-        {
-          model: Painting,
-          attributes: [
-            'id',
-            'title',
-            'artist',
-            'exhibition_date',
-            'filename',
-            'description',
-          ],
-        },
-      ],
-    });
+//     res.render('homepage', {
+//       galleries,
+//       loggedIn: req.session.loggedIn,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// });
 
-    const gallery = dbGalleryData.get({ plain: true });
-    res.render('gallery', { gallery, loggedIn: req.session.loggedIn });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+// // GET one gallery
+// // Use the custom middleware before allowing the user to access the gallery
+// router.get('/gallery/:id', withAuth, async (req, res) => {
+//   try {
+//     const dbGalleryData = await Gallery.findByPk(req.params.id, {
+//       include: [
+//         {
+//           model: Painting,
+//           attributes: [
+//             'id',
+//             'title',
+//             'artist',
+//             'exhibition_date',
+//             'filename',
+//             'description',
+//           ],
+//         },
+//       ],
+//     });
 
-// GET one painting
-// Use the custom middleware before allowing the user to access the painting
-router.get('/painting/:id', withAuth, async (req, res) => {
-  try {
-    const dbPaintingData = await Painting.findByPk(req.params.id);
+//     const gallery = dbGalleryData.get({ plain: true });
+//     res.render('gallery', { gallery, loggedIn: req.session.loggedIn });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// });
 
-    const painting = dbPaintingData.get({ plain: true });
+// // GET one painting
+// // Use the custom middleware before allowing the user to access the painting
+// router.get('/painting/:id', withAuth, async (req, res) => {
+//   try {
+//     const dbPaintingData = await Painting.findByPk(req.params.id);
 
-    res.render('painting', { painting, loggedIn: req.session.loggedIn });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+//     const painting = dbPaintingData.get({ plain: true });
+
+//     res.render('painting', { painting, loggedIn: req.session.loggedIn });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// });
 
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {

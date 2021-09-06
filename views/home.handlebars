@@ -1,0 +1,10 @@
+<h1>This is WOIAEFNOAW</h1>
+
+{{#each postArr}}
+    <h2>{{dataValues.title}}</h2>
+    <p>{{dataValues.post_text}}</p>
+    <h2>Comments:</h2>
+    {{#each dataValues.Comments}}
+        <p>{{dataValues.text}}</p>
+    {{/each}}
+{{/each}}
