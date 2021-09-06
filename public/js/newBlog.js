@@ -4,11 +4,8 @@ const newBlogFormHandler = async (event) => {
 
 const subject = document.querySelector('#subject-addpost').value.trim();
 const textBody = document.querySelector('#textBody').value.trim();
-var posting_date = new Date();
 
-console.log(user);
-console.log(text);
-console.log(posting_date);
+
 
 if (subject && textBody) {
     const response = await fetch('/api/blogs', {
