@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../models/Comment');
+
 require('dotenv').config();
 
 if (process.env.JAWSDB_URL) {
