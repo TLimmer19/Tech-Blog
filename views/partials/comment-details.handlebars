@@ -1,4 +1,7 @@
-
-    {{#each comments.text as |comment|}}
-    {{> comment-details}}
-    {{/each}}
+<section class="card">
+  <h3>Posted by: {{user}}</h3>  
+  <h4>Posted on: {{format_time post_date}}</h4>
+    <div class="card-body">
+      <p>{{text}}</p>
+    </div>
+</section>
