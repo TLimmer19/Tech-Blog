@@ -1,4 +1,4 @@
-const newBlogFormHandler = async (event) => {
+const addpostFormHandler = async (event) => {
     event.preventDefault();
 
 
@@ -8,7 +8,7 @@ const textBody = document.querySelector('#textBody').value.trim();
 
 
 if (subject && textBody) {
-    const response = await fetch('/api/blogs', {
+    const response = await fetch('/api/users/addpost', {
         method: 'POST',
         body: JSON.stringify({subject, textBody}),
         headers: { 'Content-Type': 'application/json' },
