@@ -1,6 +1,7 @@
 # Tech-Blog
 HomeWork #14 Model-View-Controller MVC
 
+Pair Programming with Jacob Guiro.
 
 # 14 Model-View-Controller (MVC): Tech Blog
 

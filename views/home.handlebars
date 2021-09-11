@@ -1,10 +1,10 @@
 <h1>This is The Tech Blog</h1>
 
-{{#each postArr}}
-    <h2>{{dataValues.title}}</h2>
-    <p>{{dataValues.post_text}}</p>
-    <h2>Comments:</h2>
-    {{#each dataValues.Comments}}
-        <p>{{dataValues.text}}</p>
-    {{/each}}
+{{#each blogs as |blog|}}
+<div class="card bg-light mb-3" style="max-width: 18rem;">
+    <a href = "/post/{{id}}"><div class="card-header">{{title}}</div></a>
+    <div class="card-body">
+        <p class="card-text">{{post_text}}</p>
+    </div>
+</div>
 {{/each}}

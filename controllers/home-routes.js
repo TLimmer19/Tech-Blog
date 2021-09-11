@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post, Comment } = require('../models');
+const { User, Post, Comment } = require('../models');
 // Import the custom middleware
 const withAuth = require('../utils/auth');
 
@@ -7,28 +7,35 @@ router.get('/', async (req, res) => {
   Post.findAll({
     include: [Comment]
   }).then(data => {
-    console.log(data)
-    const hbsObj = {
-      postArr: data
-    }
-    res.render('home', {hbsObj,
+    const blogs = data.map((d) => d.get({plain: true}));
+    console.log(blogs);
+    res.render('home', {blogs ,
     loggedIn: req.session.loggedIn});
   })
 })
 
-router.get("/Posts/:id", withAuth, async (req, res) => {
+router.get("/post/:id", withAuth, async (req, res) => {
 
   try {
-    const dbPostsData = await Posts.findByPk(req.params.id, {
+    const dbPostsData = await Post.findByPk(req.params.id, {
       include: [
         {
-          model: Comments,
-          attributes: ["user", "post_date", "text"],
+          model: User,
+          attributes: ['username'],
+        },
+        {
+          model: Comment,
+          attributes: ["user_id", "post_id", "text"],
+          include: {
+            model: User,
+            attributes: ['username'],
+          }
         },
       ],
     });
     const Posts = dbPostsData.get({ plain: true });
-    res.render("posts", { 
+    console.log(Posts);
+    res.render("viewpost", { 
       Posts, 
       loggedIn: req.session.loggedIn 
     });
@@ -58,7 +65,7 @@ router.post("/api/users/addpost", async (req, res) => {
 router.get("/Comments/:id", withAuth, async (req, res) => {
  
   try {
-    const dbCommentsData = await Comments.findByPk(req.params.id);
+    const dbCommentsData = await Comment.findByPk(req.params.id);
 
     const Comments = dbCommentsData.get({ plain: true });
 
